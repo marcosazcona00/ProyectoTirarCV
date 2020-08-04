@@ -86,11 +86,13 @@ def empleos_interesados(empleado):
     Si no tiene idiomas, que tome ese empleo (95 Q(idioma = None)), 
     O si tiene idiomas, que tenga los del empleado,si el empleado eligio idioma (95 parte del OR)
     """
+    if solicitudes_en_espera:
+        print('hola')
     empleos_de_interes = Empleo.objects.filter(
         Q(
         anios_experiencia__lte = empleado.anios_experiencia,
         tipo_empleo__in = empleado_tipos_empleos,
-        id__in = solicitudes_en_espera.values('empleo_id')
+        #id__in = solicitdes_en_espera.values('empleo_id') if solicitudes_en_espera else empleado_tipos_empleos
         ),
         (
             Q(idioma = None) | Q(idioma__in = idiomas_empleado if empleado.tiene_idiomas() else idiomas) 
@@ -100,7 +102,6 @@ def empleos_interesados(empleado):
 
     return empleos_de_interes
     
-
 class Busqueda_Empleo(View):
     def __init__(self):
         self.resultados = None
@@ -230,6 +231,7 @@ class InicioEmpleadoView(TemplateView):
         context['empleado'] = empleado
         empleos_interes = empleos_interesados(Usuario.objects.get_subclass(usuario_id = self.request.session['_auth_user_id']))
         context['empleos_interes'] = empleos_interes[:4]
+        context['solicitudes'] = SolicitudEmpleo.objects.filter(empleado = empleado)
         return context
 
 class ListadoEmpleosEmpleadorView(ListView):
@@ -306,6 +308,7 @@ class ActualizarDatosEmpleadoView(FormView):
         user.save()
         
         empleado = form_tipos_usuarios['empleado']
+        print(empleado)
         empleado.cv = form.cleaned_data['cv']
         empleado.anios_experiencia = form.cleaned_data['anios_experiencia']
         empleado.save()
@@ -313,16 +316,23 @@ class ActualizarDatosEmpleadoView(FormView):
         idiomas = form.cleaned_data['idioma']
         #Permite borrar todas las tuplas de la relacion many to many
         "Borramos las relaciones pre-existentes por si borra alguna idioma"
-        empleado.idioma.through.objects.all().delete()
+        idiomas_empleado = empleado.idioma.all()
+
+        for idioma in idiomas_empleado:
+            empleado.idioma.remove(idioma)
         
         "Cargamos las nuevas opciones de idiomas"
+
         for idioma in idiomas:
             empleado.idioma.add(idioma)
         
         "Borramos las relaciones pre-existentes por si borro algun tipo de empleo"
-        empleado.tipos_empleos_interes.through.objects.all().delete()
+        tipos_empleos_empleado = empleado.tipos_empleos_interes.all()
         tipos_empleos = form.cleaned_data['tipos_empleos_interes']
         
+        for empleo_empleado in tipos_empleos_empleado:
+            empleado.tipos_empleos_interes.remove(empleo_empleado)
+
         "Cargamos los tipos de empleos"
         for tipo_empleo in tipos_empleos:
             empleado.tipos_empleos_interes.add(tipo_empleo)

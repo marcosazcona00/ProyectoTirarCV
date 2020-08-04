@@ -17,6 +17,9 @@
     li {    
         padding-left: 20px;
     }
+    h6 {
+      padding-top:20px
+     }
 </style>
 {% endblock %}
 {% block titulo%}
@@ -77,6 +80,21 @@
         {% for empleo in empleos_interes %}
           <li>
             <div class="card" style="width: 18rem; height: 30rem;">
+              {% if not empleo in empleado.empleos_aplicados %}
+                <h6 class="card-subtitle mb-2 text-muted">
+                  <a href="/aplicar_empleo/{{empleo.id}}"> Aplicar </a>
+                <h6>
+              {% else %}
+                  {% for solicitud in solicitudes %}
+                    {% if empleo.id == solicitud.empleo_id %}
+                      {% if solicitud.aceptado %}
+                        <h6 class="card-subtitle mb-2 text-muted">Ya fuiste aceptado<h6>
+                      {% else %}
+                        <h6 class="card-subtitle mb-2 text-muted">Solicitud Enviada<h6>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+              {% endif %}
               <div class="card-body">
                 <h5 class="card-title">Empleador: {{empleo.empleador.datos_usuario.username}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{empleo.fecha_publicacion}}</h6>
