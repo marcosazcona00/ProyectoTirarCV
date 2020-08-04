@@ -348,27 +348,3 @@ class ListadoAplicantesView(ListView):
         return SolicitudEmpleo.objects.filter(empleo_id = empleo_id,aceptado = False)
 
 class ListadoEmpleosAplicadosView(ListView):        
-    template_name = 'listado_empleos_aplicados.html'
-    paginate_by = 4
-
-    def solicitudes(self,id_usuario):
-        empleado = Usuario.objects.get_subclass(usuario_id = id_usuario)
-        solicitudes = SolicitudEmpleo.objects.filter(empleado = empleado)
-        print(solicitudes)
-        return solicitudes
-
-    def get_context_data(self, **kwargs):
-        context = super(ListadoEmpleosAplicadosView,self).get_context_data(**kwargs)
-        id_usuario = self.request.session['_auth_user_id']
-        solicitudes = self.solicitudes(id_usuario)
-        empleado = Usuario.objects.get_subclass(usuario_id = self.request.session['_auth_user_id'])
-        context['empleado'] = empleado
-        context['solicitudes_empleo'] = solicitudes
-        context['tipos_empleos'] = Tipo_Empleo.objects.all()
-        return context
-
-    def get_queryset(self):
-        id_usuario = self.request.session['_auth_user_id']
-        solicitudes = self.solicitudes(id_usuario)
-        empleos = Empleo.objects.filter(id__in = solicitudes.values('empleo_id'))  
-        return empleos
