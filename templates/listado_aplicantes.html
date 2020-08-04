@@ -1,0 +1,49 @@
+{% extends "listado_base.html" %}
+{% block links %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+{% endblock links %}
+{% block estilos %}
+<style>
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: inline-flex;
+    }
+</style>
+{% endblock %}
+{% block listado %}
+    {% for solicitud in object_list %}
+    <ul>
+
+        <div class="card bg-light mb-3" style="max-width: 30rem;">
+            <div class="card-header">
+                <h3>    
+                    Aplicante  <strong>{{solicitud.empleado.user}}</strong>
+                </h3>
+                <a href="/aceptar_entrevista/{{solicitud.id}}">Aceptar Entrevista</a>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    <object data="/static/{{solicitud.empleado.cv}}" type="application/pdf" width="300" height="200">
+                        Curriculum Vitae
+                        <a href="/media/{{solicitud.empleado.cv}}">{{solicitud.empleado.cv}}</a>
+                    </object>
+                </h5>
+                <p class="card-text">Datos personales</p>
+                <hr>
+                <p class="card-text"><strong>Email</strong>: {{solicitud.empleado.user.email}}</p>
+                <p class="card-text"><strong>Nombre</strong>: {{solicitud.empleado.user.first_name}}</p>
+                <p class="card-text"><strong>Apellido</strong>: {{solicitud.empleado.user.last_name}}</p>
+                <p class="card-text"><strong>Años de Experiencia</strong>: {{solicitud.empleado.anios_experiencia}}</p>
+                <p class="card-text"> <strong>Idiomas</strong>: 
+                    {% for idioma  in solicitud.empleado.idioma.all %}
+                        {{idioma}},
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+    </ul>
+    {% endfor %}
+{% endblock listado %}

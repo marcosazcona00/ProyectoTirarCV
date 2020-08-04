@@ -1,0 +1,32 @@
+{% extends "home_empleador.html" %}
+
+{% block cuerpo %}
+    {% if object_list %}
+        {% block encabezado_listado %} {% endblock encabezado_listado %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo; 1</a></li>
+                        <li class="page-item"><a class="page-link"href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"> Anterior </a></li>
+
+                {% endif %}
+                <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">{{ page_obj.number }}</a>
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                    </li>
+                    <li class="page-item">
+                        <a  class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Ultima &raquo;</a>
+                    </li>
+                {% else %}  
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"> Siguiente </a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+    {% block listado %} {% endblock listado%}
+ {% endblock cuerpo %}

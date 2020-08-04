@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block links %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+ {% endblock links %}
+{% block titulo %}
+<title>
+    Empleador
+</title>
+{% endblock titulo%}
+
+{% block extra_inicio %}
+<li class="nav-item">
+  <a class="nav-link" href="/listado_empleos_empleador/">Tus empleos  </a>
+</li>
+{% endblock %}
+
+{% block extra_navbar %}
+<li class="nav-item">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Cargar Empleo</button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Nueva Oferta</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" enctype="multipart/form-data" action="/cargar_empleo/">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label> 
+                        <strong> 
+                            Tipo de Empleo
+                          </strong>
+                          {{form.tipo_empleo}} 
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="id_descripcion">
+                        <strong> 
+                            Descripcion
+                        </strong>
+                    </label> 
+                    <textarea name="descripcion" cols="40" rows="10" maxlength="255" required="" id="id_descripcion"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="id_descripcion">
+                      <strong> 
+                          Idioma
+                      </strong>
+                  </label> 
+                  {{form.idioma}}
+                </div>               
+                <div class="form-group">
+                  <label for="id_descripcion">
+                    <strong> Años de Experiencia Requeridos </strong>
+                  </label> 
+                  <input type="number" class="form-control" name="anios_experiencia" required="" id="id_anios_experiencia">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+</li>
+<script>
+    $('select').selectpicker();
+  </script>
+{% endblock extra_navbar %}
+
+{% block cuerpo %}   
+<h1> Bienvenido empleador </h1>
+{% endblock %}

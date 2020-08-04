@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block cuerpo %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+         <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <strong>{{  error |escape }}</strong>
+            {% endfor %}
+        </div>  
+    {% endif %}
+ <p>
+    {% if form.username.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.username.errors %}
+                <strong>{{  error |escape }}</strong>
+            {% endfor %}
+        </div>    
+    {% endif %}
+     <label for="id_username">Nombre de ususario</label> 
+     <input type="text" class="form-control" name="username" required="" id="id_username">
+ </p>
+<p>
+    <label for="id_password">Contraseña</label> 
+    <input type="password" class="form-control" name="password" required="" id="id_password">
+</p>
+<p>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</p>   
+</form>
+{% endblock %}

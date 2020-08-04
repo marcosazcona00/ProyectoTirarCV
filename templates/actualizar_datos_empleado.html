@@ -1,0 +1,68 @@
+{% extends "registro_base.html" %}
+{% block links %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+{% endblock links %}
+{% block formulario %}
+<p>
+    {% if form.username.errors%}
+        <div class="alert alert-danger">
+            {% for error in form.username.errors %}
+                <strong>{{  error |escape }}</strong>
+            {% endfor %}
+        </div>        
+    {% endif %}
+    <label for="id_username">Nombre de Usuario</label> 
+    <input class="form-control" type="text" name="username" value="{{form.username.initial}}" required="" id="id_username">
+    <input type="hidden" name="initial-username" value="{{form.username.initial}}" id="initial-id_username">
+</p>
+<p>
+    <label for="id_first_name">Nombre</label> 
+    <input class="form-control" type="text" name="first_name" value="{{form.first_name.initial}}" required="" id="id_first_name">
+    <input type="hidden" name="initial-first_name" value="{{form.first_name.initial}}" id="initial-id_first_name">
+</p>
+<p>
+    <label for="id_last_name">Apellido</label> 
+    <input class="form-control" type="text" name="last_name" value="{{form.last_name.initial}}" required="" id="id_last_name">
+    <input type="hidden" name="initial-last_name" value="{{form.last_name.initial}}" id="initial-id_last_name">
+</p>
+<p>
+    <label for="id_email">Email</label> 
+    <input class="form-control" type="text" name="email" value="{{form.email.initial}}" required="" id="id_email">
+    <input type="hidden" name="initial-email" value="{{form.email.initial}}" id="initial-id_email">
+</p>
+<p>
+    <label for="id_idioma">Idioma: </label> 
+    {{form.idioma}}
+</p>
+<p>
+    <label for="id_tipos_empleos_interes">Empleos de Interes:</label>
+    {{form.tipos_empleos_interes}}
+</p>
+<hr>
+<p>
+    {% if form.cv.errors %}
+        <div class="alert alert-danger">
+            {% for error in form.cv.errors %}
+                <strong>{{  error |escape }}</strong>
+            {% endfor %}
+        </div>    
+    {% endif %}
+    <label>Nuevo CV</label>
+    <input type="file" name="cv" id="id_cv">
+    <br>
+    <label for="id_cv"> CV actual: </label> <a href="#">{{form.cv.initial}}</a>
+</p>     
+<p>
+    <label for="id_anios_experiencia">Anios experiencia:</label> 
+    <input class="form-control" type="number" name="anios_experiencia" value="{{form.anios_experiencia.initial}}" required="" id="id_anios_experiencia">
+</p>
+
+
+<script>
+    $('select').selectpicker();
+</script>
+{% endblock formulario %}

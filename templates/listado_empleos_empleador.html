@@ -1,0 +1,86 @@
+{% extends "listado_base.html" %}
+{% block links %}
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+{% endblock links %}
+{% block titulo %}
+<title>
+    Tus empleos
+</title>
+{% endblock titulo%}
+
+{% block estilos %}
+<style>
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: inline-flex;
+    }
+    li {    
+        padding-left: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block encabezado_listado %}
+    <div class="page-header">
+        <h1 style="text-align:center">Tus empleos <strong>{{request.user.username}}</strong></h1>
+    </div>
+{% endblock encabezado_listado %}
+
+{% block listado %}
+    {% if not object_list %}
+    <div class="alert alert-danger">
+            <h3 href="#" style="text-align: center;" class="alert-link"> No publicaste empleos aun </h3>
+        </div>
+    {% endif %}
+    <ul style="padding-top:20px">
+        {% for empleo in object_list %}
+            <li>
+                <div class="card" style="width: 20rem; height: 30rem;">
+                    <!--Boton Eliminar Empleo -->
+                    <form method="POST" action="/borrar_empleo/{{empleo.id}}/">
+                        {% csrf_token %}
+                        <button style="margin-left:280px" type="submit" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </form>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                            <a href="/actualizar_empleo/{{empleo.id}}"> Actualizar </a>
+                    <h6>
+                    {% if empleo.solicitudes %}
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            <a class="card-subtitle mb-2 text-muted" href="/listado_aplicantes/{{empleo.id}}"> Ver aplicantes </a>
+                        <h6>
+                    {% endif %}
+                    <div class="card-body">
+                    <h5 class="card-title">Empleo</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Tipos empleos <h6>
+                    <p>
+                        {% for tipo_empleo_asociado in empleo.tipo_empleo.all %}
+                            <span class="badge badge-danger">#{{tipo_empleo_asociado}}</span>
+                        {% endfor %}
+                    </p>
+                    <p class="card-text">{{empleo.descripcion}}</p>
+                    <p class="card-text"><strong>Años de experiencia: </strong>{{empleo.anios_experiencia}} </p>  
+                    {% if empleo.idiomas %}
+                        <div id="idiomas">
+                            <p class="card-text"> Idioma </p>
+                            {% for idioma in empleo.idiomas %}
+                                <span class="badge badge-success">#{{idioma}}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <script>
+        $('select').selectpicker();
+      </script>
+{% endblock listado%}
